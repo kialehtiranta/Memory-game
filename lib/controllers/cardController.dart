@@ -36,7 +36,7 @@ class CardController {
     "assets/rypsyt.jpg",
     "assets/shamblen-studios-euqiHwS38Rw-unsplash.jpg",
     "assets/stephany-williams-yx3-a7ualMM-unsplash.jpg",
-    "assets/tangerine-newt-63jVJAIfpI-unsplash.jpg",
+    "assets/tangerine-newt-63jVvJAIfpI-unsplash.jpg",
     "assets/tangerine-newt-a9rxefN9vgY-unsplash.jpg",
     "assets/thought-catalog-9aOswReDKPo-unsplash.jpg",
     "assets/tijana-drndarski-ta0b_NDxi6k-unsplash.jpg",

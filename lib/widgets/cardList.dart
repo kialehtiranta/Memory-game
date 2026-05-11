@@ -9,25 +9,49 @@ class CardList extends StatelessWidget {
   final CardController cardController = Get.find<CardController>();
   final LevelService levelService = Get.find<LevelService>();
 
-  int gridDimension(int level) => 2 + level * 2;
+  int gridDimension(int level, double screenWidth) {
+    if (screenWidth <= 420) {
+      return 4;
+    }
+    return 2 + level * 2;
+  }
 
   double cardSizeForLevel(int level) => level == 2 ? 80 : 100;
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      final screenWidth = MediaQuery.of(context).size.width;
+      final screenHeight = MediaQuery.of(context).size.height;
       final cards = cardController.cards;
-      final dimension = gridDimension(levelService.currentLevel);
-      final cardSize = cardSizeForLevel(levelService.currentLevel);
+      final dimension = gridDimension(levelService.currentLevel, screenWidth);
+      var cardSize = cardSizeForLevel(levelService.currentLevel);
       final spacing = 5.0;
       final padding = 5.0;
+
+      // Calculate grid dimensions
       final gridWidth =
+          dimension * cardSize + (dimension - 1) * spacing + padding * 2;
+      final rowCount = (cards.length / dimension).ceil();
+      final gridHeight =
+          rowCount * cardSize + (rowCount - 1) * spacing + padding * 2;
+
+      // Check if scrolling is needed
+      final horizontalScrollNeeded = gridWidth > screenWidth;
+      final verticalScrollNeeded =
+          gridHeight > screenHeight - 100; // 100px buffer for other UI
+
+      if (horizontalScrollNeeded || verticalScrollNeeded) {
+        cardSize *= 0.7;
+      }
+
+      final finalGridWidth =
           dimension * cardSize + (dimension - 1) * spacing + padding * 2;
 
       return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: SizedBox(
-          width: gridWidth,
+          width: finalGridWidth,
           child: GridView.count(
             crossAxisCount: dimension,
             childAspectRatio: 1,
@@ -35,7 +59,7 @@ class CardList extends StatelessWidget {
             mainAxisSpacing: spacing,
             crossAxisSpacing: spacing,
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             children: List.generate(cards.length, (index) {
               final card = cards[index];
               return Center(
