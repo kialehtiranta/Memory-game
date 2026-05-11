@@ -1,0 +1,66 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class CardController {
+  var cards = [].obs;
+
+  CardController() : cards = RxList<Image>() {
+    cards.value = [
+      Image.asset("assets/estudio-bloom-oo3kSFZ7uHk-unsplash.jpg"),
+      Image.asset("assets/giorgio-trovato-fczCr7MdE7U-unsplash.jpg"),
+      Image.asset("assets/jaro_n-lemon-1024641_640.jpg"),
+      Image.asset("assets/jo-sonn-zeFy-oCUhV8-unsplash.jpg"),
+      Image.asset("assets/lewis-fagg-Nl7eLS8E2Ss-unsplash.jpg"),
+      Image.asset("assets/mae-mu-U1iYwZ8Dx7k-unsplash.jpg"),
+      Image.asset("assets/mae-mu-vbAEHCrvXZ0-unsplash.jpg"),
+      Image.asset("assets/shamblen-studios-euqiHwS38Rw-unsplash.jpg"),
+      Image.asset("assets/stephany-williams-yx3-a7ualMM-unsplash.jpg"),
+      Image.asset("assets/tangerine-newt-63jVvJAIfpI-unsplash.jpg"),
+      Image.asset("assets/tangerine-newt-a9rxefN9vgY-unsplash.jpg"),
+      Image.asset("assets/thought-catalog-9aOswReDKPo-unsplash.jpg"),
+      Image.asset("assets/tijana-drndarski-ta0b_NDxi6k-unsplash.jpg"),
+      Image.asset("karhu.jpg"),
+      Image.asset("lasi.jpg"),
+      Image.asset("leaf.jpg"),
+      Image.asset("lemon.jpg"),
+      Image.asset("melon.jpg"),
+      Image.asset("ryple.jpg"),
+      Image.asset("vattu.jpg"),
+      Image.asset("aurinko0.jpg"),
+      Image.asset("coffee.jpg"),
+      Image.asset("koivu0.jpg"),
+      Image.asset("kukat0.jpg"),
+      Image.asset("laventeli0.jpg"),
+      Image.asset("pallo0.jpg"),
+      Image.asset("kukka0.jpg"),
+      //
+      Image.asset("assets/estudio-bloom-oo3kSFZ7uHk-unsplash.jpg"),
+      Image.asset("assets/giorgio-trovato-fczCr7MdE7U-unsplash.jpg"),
+      Image.asset("assets/jaro_n-lemon-1024641_640.jpg"),
+      Image.asset("assets/jo-sonn-zeFy-oCUhV8-unsplash.jpg"),
+      Image.asset("assets/lewis-fagg-Nl7eLS8E2Ss-unsplash.jpg"),
+      Image.asset("assets/mae-mu-U1iYwZ8Dx7k-unsplash.jpg"),
+      Image.asset("assets/mae-mu-vbAEHCrvXZ0-unsplash.jpg"),
+      Image.asset("assets/shamblen-studios-euqiHwS38Rw-unsplash.jpg"),
+      Image.asset("assets/stephany-williams-yx3-a7ualMM-unsplash.jpg"),
+      Image.asset("assets/tangerine-newt-63jVvJAIfpI-unsplash.jpg"),
+      Image.asset("assets/tangerine-newt-a9rxefN9vgY-unsplash.jpg"),
+      Image.asset("assets/thought-catalog-9aOswReDKPo-unsplash.jpg"),
+      Image.asset("assets/tijana-drndarski-ta0b_NDxi6k-unsplash.jpg"),
+      Image.asset("karhu.jpg"),
+      Image.asset("lasi.jpg"),
+      Image.asset("leaf.jpg"),
+      Image.asset("lemon.jpg"),
+      Image.asset("melon.jpg"),
+      Image.asset("ryple.jpg"),
+      Image.asset("vattu.jpg"),
+      Image.asset("aurinko0.jpg"),
+      Image.asset("coffee.jpg"),
+      Image.asset("koivu0.jpg"),
+      Image.asset("kukat0.jpg"),
+      Image.asset("laventeli0.jpg"),
+      Image.asset("pallo0.jpg"),
+      Image.asset("kukka0.jpg"),
+    ];
+  }
+}
