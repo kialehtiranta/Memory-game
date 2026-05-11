@@ -1,49 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/widgets/cardList.dart';
 import 'package:get/get.dart';
+import '../controllers/cardController.dart';
 import '../main.dart';
-import 'resultScreen.dart';
-import '../services/levelService.dart';
 
 class GameScreen extends StatelessWidget {
-  var questionIndex = 0.obs;
-  var score = 0.obs;
-
-  _answerQuestion(bool answer) {
-    var answerCorrect = questions[questionIndex.value]["answer"] == answer;
-    if (answerCorrect) {
-      score.value++;
-    }
-
-    if (questionIndex.value < questions.length - 1) {
-      questionIndex.value++;
-    } else {
-      final levelService = Get.find<LevelService>();
-      if (score.value == questions.length) {
-        levelService.completedLevels.add(levelService.currentLevel);
-      }
-      Get.to(ResultScreen(score: score.value));
-    }
-  }
+  const GameScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final cardController = Get.find<CardController>();
     return GameScaffold(
       content: [
-        Obx(
-          () => Text(
-            questions[questionIndex.value]["question"] as String,
-            style: TextStyle(fontSize: 48),
-          ),
-        ),
-        Padding(padding: EdgeInsets.all(16)),
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            GameButton(text: "Yes", onPressed: () => _answerQuestion(true)),
-            Padding(padding: EdgeInsets.all(16)),
-            GameButton(text: "No", onPressed: () => _answerQuestion(false)),
+            GameButton(text: "Back", onPressed: () => Get.back()),
+            Obx(
+              () => Text(
+                "Attempts: ${cardController.attempts.value}",
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
           ],
         ),
+        Padding(padding: EdgeInsets.all(16)),
+        CardList(),
       ],
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../controllers/cardController.dart';
 import '../main.dart';
 import 'gameScreen.dart';
 import 'startScreen.dart';
@@ -11,13 +12,18 @@ class LevelScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final levels = Iterable.generate(levelService.totalLevels).expand((level) {
+      final completed = levelService.completedLevels.contains(level);
       return [
         Padding(padding: EdgeInsets.all(16)),
         GameButton(
           text:
-              "Level ${level + 1} (${levelService.completedLevels.contains(level) ? "Completed" : "Not completed"})",
+              "Level ${level + 1} (${completed ? "Completed" : "Not completed"})",
+          backgroundColor: completed
+              ? const Color.fromARGB(255, 228, 234, 221)
+              : null,
           onPressed: () {
-            levelService.currentLevel = level;
+            levelService.setCurrentLevel(level);
+            Get.find<CardController>().generateLevelCards(level);
             Get.to(GameScreen());
           },
         ),

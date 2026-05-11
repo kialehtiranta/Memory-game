@@ -1,42 +1,153 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/controllers/cardController.dart';
+import 'package:flutter_application_2/services/levelService.dart';
 import 'package:get/get.dart';
-
-class Breakpoints {
-  static const sm = 500;
-  static const md = 800;
-}
 
 class CardList extends StatelessWidget {
   final CardController cardController = Get.find<CardController>();
-  final cards = Get.find<CardController>().cards;
+  final LevelService levelService = Get.find<LevelService>();
+
+  int gridDimension(int level) => 2 + level * 2;
+
+  double cardSizeForLevel(int level) => level == 2 ? 80 : 100;
 
   @override
   Widget build(BuildContext context) {
-    final cards = this.cards;
-    final cardsList = cards
-        .map(
-          (card) => Container(
-            color: const Color.fromARGB(255, 241, 242, 244),
-            child: Center(child: card),
-          ),
-        )
-        .toList();
-    final size = MediaQuery.of(context).size;
+    return Obx(() {
+      final cards = cardController.cards;
+      final dimension = gridDimension(levelService.currentLevel);
+      final cardSize = cardSizeForLevel(levelService.currentLevel);
+      final spacing = 5.0;
+      final padding = 5.0;
+      final gridWidth =
+          dimension * cardSize + (dimension - 1) * spacing + padding * 2;
 
-    return Obx(
-      () => GridView.count(
-        crossAxisCount: size.width < Breakpoints.sm
-            ? 1
-            : size.width < Breakpoints.md
-            ? 2
-            : 3,
-        padding: EdgeInsets.all(30),
-        mainAxisSpacing: 30,
-        crossAxisSpacing: 30,
-        shrinkWrap: true,
-        children: cardsList,
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: SizedBox(
+          width: gridWidth,
+          child: GridView.count(
+            crossAxisCount: dimension,
+            childAspectRatio: 1,
+            padding: EdgeInsets.all(padding),
+            mainAxisSpacing: spacing,
+            crossAxisSpacing: spacing,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            children: List.generate(cards.length, (index) {
+              final card = cards[index];
+              return Center(
+                child: SizedBox(
+                  width: cardSize,
+                  height: cardSize,
+                  child: FlipCard(
+                    imagePath: card.imagePath,
+                    revealed: card.revealed.value,
+                    onTap: () => cardController.toggleCard(index),
+                  ),
+                ),
+              );
+            }),
+          ),
+        ),
+      );
+    });
+  }
+}
+
+class FlipCard extends StatefulWidget {
+  final String imagePath;
+  final bool revealed;
+  final VoidCallback onTap;
+
+  const FlipCard({
+    Key? key,
+    required this.imagePath,
+    required this.revealed,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  _FlipCardState createState() => _FlipCardState();
+}
+
+class _FlipCardState extends State<FlipCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: Duration(milliseconds: 350),
+      vsync: this,
+    );
+    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+
+    if (widget.revealed) {
+      _controller.value = 1;
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant FlipCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.revealed != widget.revealed) {
+      if (widget.revealed) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: widget.onTap,
+      child: AnimatedBuilder(
+        animation: _animation,
+        builder: (context, child) {
+          final value = _animation.value;
+          final angle = pi * value;
+          final isFront = value > 0.5;
+
+          Widget face = isFront ? _buildFront() : _buildBack();
+          if (isFront) {
+            face = Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationY(pi),
+              child: face,
+            );
+          }
+
+          return Transform(
+            alignment: Alignment.center,
+            transform: Matrix4.identity()
+              ..setEntry(3, 2, 0.001)
+              ..rotateY(angle),
+            child: face,
+          );
+        },
       ),
     );
+  }
+
+  Widget _buildBack() {
+    return Container(color: const Color.fromARGB(255, 233, 227, 237));
+  }
+
+  Widget _buildFront() {
+    return Image.asset(widget.imagePath, fit: BoxFit.cover);
   }
 }

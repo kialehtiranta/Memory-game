@@ -8,7 +8,7 @@ class StartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return GameScaffold(
       content: [
-        Text("Welcome to the game!", style: TextStyle(fontSize: 48)),
+        Text("Welcome to the memory game!", style: TextStyle(fontSize: 44)),
         Padding(padding: EdgeInsets.all(16)),
         GameButton(text: "Start", onPressed: () => Get.to(LevelScreen())),
       ],
